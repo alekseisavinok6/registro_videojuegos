@@ -1,12 +1,13 @@
-<div class="modal fade" id="nu_ventana_1" tabindex="-1" aria-labelledby="nu_ventana_2" aria-hidden="true">
+<div class="modal fade" id="ed_ventana_1" tabindex="-1" aria-labelledby="ed_ventana_2" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="nu_ventana_2">Agregar datos</h1>
+                <h1 class="modal-title fs-5" id="ed_ventana_2">Editar datos</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="guardarDatos.php" method="post" enctype="multipart/form-data">
+                <form action="actualizarDatos.php" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="id" name="id">
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre:</label>
                         <input type="text" name="nombre" id="nombre" class="form-control" required>

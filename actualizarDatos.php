@@ -2,14 +2,13 @@
 
 require 'bd.php';
 
+$id = $conn->real_escape_string($_POST['id']);
 $nombre = $conn->real_escape_string($_POST['nombre']);
 $descripcion = $conn->real_escape_string($_POST['descripcion']);
 $genero = $conn->real_escape_string($_POST['genero']);
 
-$sql = "INSERT INTO videojuego (nombre, descripcion, id_genero, fecha_alta)
-VALUES ('$nombre', '$descripcion', $genero, NOW())";
+$sql = "UPDATE videojuego SET nombre ='$nombre', descripcion = '$descripcion', id_genero=$genero WHERE id=$id";
 if ($conn->query($sql)) {
-    $id = $conn->insert_id;
 }
 
 $conn->close();

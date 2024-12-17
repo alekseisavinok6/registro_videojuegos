@@ -1,5 +1,11 @@
 <?php
 
+require 'bd.php';
+
+$sqlVideojuegos = "SELECT v.id, v.nombre, v.descripcion, g.nombre AS genero FROM videojuego AS v
+INNER JOIN genero AS g ON v.id_genero=g.id";
+$videojuegos = $conn->query($sqlVideojuegos);
+
 ?>
 
 <!doctype html>
@@ -18,7 +24,7 @@
 
         <div class="row justify-content-end">
             <div class="col-auto">
-                <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ventana_1"><i class="fa-solid fa-circle-plus"></i> Alta de datos</a>
+                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nu_ventana_1"><i class="fa-solid fa-circle-plus"></i> Alta de datos</a>
             </div>
         </div>
 
@@ -35,17 +41,77 @@
             </thead>
 
             <tbody>
-
+                <?php while ($row_videojuego = $videojuegos->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?= $row_videojuego['id']; ?></td>
+                        <td><?= $row_videojuego['nombre']; ?></td>
+                        <td><?= $row_videojuego['descripcion']; ?></td>
+                        <td><?= $row_videojuego['genero']; ?></td>
+                        <td></td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#ed_ventana_1" data-bs-id="<?= $row_videojuego['id']; ?>"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                            <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#el_ventana_1" data-bs-id="<?= $row_videojuego['id']; ?>"><i class="fa-solid fa-trash"></i></i> Eliminar</a>
+                        </td>
+                    </tr>
+                <?php } ?>
             </tbody>
-
         </table>
-
-        <?php include 'nuevaVentana.php'; ?>
-
-
-
-
     </div>
+
+
+    <?php
+    $sqlGenero = "SELECT id, nombre FROM genero";
+    $generos = $conn->query($sqlGenero);
+
+    $conn->close();
+    ?>
+
+    <?php include 'nuevaVentana.php'; ?>
+
+    <?php $generos->data_seek(0); ?>
+
+    <?php include 'editarVentana.php'; ?>
+    <?php include 'eliminarVentana.php'; ?>
+
+    <script>
+        let editarVentana = document.getElementById('ed_ventana_1')
+        let eliminarVentana = document.getElementById('el_ventana_1')
+
+        editarVentana.addEventListener('shown.bs.modal', event => {
+            let button = event.relatedTarget
+            let id = button.getAttribute('data-bs-id')
+
+            let inputId = editarVentana.querySelector('.modal-body #id')
+            let inputNombre = editarVentana.querySelector('.modal-body #nombre')
+            let inputDescripcion = editarVentana.querySelector('.modal-body #descripcion')
+            let inputGenero = editarVentana.querySelector('.modal-body #genero')
+
+            let url = "obtenerVideojuego.php"
+            let formData = new FormData()
+            formData.append('id', id)
+
+            fetch(url, {
+                method: "POST",
+                body: formData
+            }).then(response => response.json())
+                .then(data => {
+
+                    inputId.value = data.id
+                    inputNombre.value = data.nombre
+                    inputDescripcion.value = data.descripcion
+                    inputGenero.value = data.id_genero
+
+                }).catch(err => console.log(err))
+        })
+
+        eliminarVentana.addEventListener('shown.bs.modal', event => {
+            let button = event.relatedTarget
+            let id = button.getAttribute('data-bs-id')
+            eliminarVentana.querySelector('.modal-footer #id').value = id
+        })
+
+    </script>
+
 
     <script src="recursos/js/bootstrap.bundle.min.js"></script>
 </body>
