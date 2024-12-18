@@ -18,7 +18,7 @@
                     <div class="mb-3">
                         <label for="genero" class="form-label">Género:</label>
                         <select name="genero" id="genero" class="form-select" required>
-                            <option value="">Seleccionar...</option>
+                            <option>Seleccionar...</option>
                             <?php while ($row_genero = $generos->fetch_assoc()) { ?>
                                 <option value="<?php echo $row_genero["id"]; ?>"><?= $row_genero["nombre"] ?></option>
                             <?php } ?>
