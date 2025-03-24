@@ -1,0 +1,445 @@
+//fichero 1 actualizarDatos.php
+
+<?php
+
+session_start();
+
+require 'bd.php';
+
+$id = $conn->real_escape_string($_POST['id']);
+$nombre = $conn->real_escape_string($_POST['nombre']);
+$descripcion = $conn->real_escape_string($_POST['descripcion']);
+$genero = $conn->real_escape_string($_POST['genero']);
+
+$sql = "UPDATE videojuego SET nombre ='$nombre', descripcion = '$descripcion', id_genero=$genero WHERE id=$id";
+
+if ($conn->query($sql)) {
+
+    $_SESSION['color'] = "success";
+    $_SESSION['msg'] = "Registro actualizado";
+
+    if ($_FILES['imagen']['error'] == UPLOAD_ERR_OK) {
+        $permitidos = array("image/jpg", "image/jpeg");
+        if (in_array($_FILES['imagen']['type'], $permitidos)) {
+
+            $dir = "imagenes";
+
+            $info_img = pathinfo($_FILES['imagen']['name']);
+            $info_img['extension'];
+
+            $imagen = $dir . '/' . $id . '.jpg';
+
+            if (!file_exists($dir)) {
+                mkdir($dir, 0777);
+            }
+
+            if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $imagen)) {
+                $_SESSION['color'] = "danger";
+                $_SESSION['msg'] .= "<br>No se pudo guardar la imagen";
+            }
+        } else {
+            $_SESSION['color'] = "danger";
+            $_SESSION['msg'] .= "<br>Formato de imagen inválido";
+        }
+    }
+} else {
+    $_SESSION['color'] = "danger";
+    $_SESSION['msg'] = "Actualización del registro fallida";
+}
+
+$conn->close();
+
+header('Location: index.php');
+
+
+// fichero 2 editarVentana.php
+
+<div class="modal fade" id="ed_ventana_1" tabindex="-1" aria-labelledby="ed_ventana_2" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ed_ventana_2">Editar datos</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="actualizarDatos.php" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="id" name="id">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" name="nombre" id="nombre" class="form-control form-control-sm" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción:</label>
+                        <textarea name="descripcion" id="descripcion" class="form-control form-control-sm" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="genero" class="form-label">Género:</label>
+                        <select name="genero" id="genero" class="form-select form-select-sm" required>
+                            <option value="">Seleccionar...</option>
+                            <?php while ($row_genero = $generos->fetch_assoc()) { ?>
+                                <option value="<?php echo $row_genero["id"]; ?>"><?= $row_genero["nombre"] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <img id="img_imagen" width="100" class="img-thumbnail">
+                    </div>
+                    <div class="mb-3">
+                        <label for="imagen" class="form-label">Imagen:</label>
+                        <input type="file" name="imagen" id="imagen" class="form-control form-control-sm" accept="image/jpeg">
+                    </div>
+                    <div class="d-flex justify-content-end pt2">
+                        <button type="button" class="btn btn-secondary me-1" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-warning ms-1"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+// fichero 3 eliminarDatos.php
+
+<?php
+
+session_start();
+
+require 'bd.php';
+
+$id = $conn->real_escape_string($_POST['id']);
+
+$sql = "DELETE FROM videojuego WHERE id=$id";
+
+if ($conn->query($sql)) {
+
+    $dir = "imagenes";
+    $imagen = $dir . '/' . $id . '.jpg';
+
+    if (file_exists($imagen)) {
+        unlink($imagen);
+    }
+
+    $_SESSION['color'] = "success";
+    $_SESSION['msg'] = "Registro eliminado";
+} else {
+    $_SESSION['color'] = "danger";
+    $_SESSION['msg'] = "Fallo al eliminar registro";
+}
+
+$conn->close();
+
+header('Location: index.php');
+
+
+// fichero 4 eliminarVentana.php
+
+<div class="modal fade" id="el_ventana_1" tabindex="-1" aria-labelledby="el_ventana_2" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="el_ventana_2">Notificación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Quiere borrar el registro?
+            </div>
+
+            <div class="modal-footer">
+                <form action="eliminarDatos.php" method="post">
+
+                    <input type="hidden" name="id" id="id">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+// fichero 5 guardarDatos.php
+
+<?php
+
+session_start();
+
+require 'bd.php';
+
+$nombre = $conn->real_escape_string($_POST['nombre']);
+$descripcion = $conn->real_escape_string($_POST['descripcion']);
+$genero = $conn->real_escape_string($_POST['genero']);
+
+$sql = "INSERT INTO videojuego (nombre, descripcion, id_genero, fecha_alta)
+VALUES ('$nombre', '$descripcion', $genero, NOW())";
+
+if ($conn->query($sql)) {
+    $id = $conn->insert_id;
+
+    $_SESSION['color'] = "success";
+    $_SESSION['msg'] = "Registro guardado";
+
+    if ($_FILES['imagen']['error'] == UPLOAD_ERR_OK) {
+        $permitidos = array("image/jpg", "image/jpeg");
+        if (in_array($_FILES['imagen']['type'], $permitidos)) {
+
+            $dir = "imagenes";
+
+            $info_img = pathinfo($_FILES['imagen']['name']);
+            $info_img['extension'];
+
+            $imagen = $dir . '/' . $id . '.jpg';
+
+            if (!file_exists($dir)) {
+                mkdir($dir, 0777);
+            }
+
+            if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $imagen)) {
+                $_SESSION['color'] = "danger";
+                $_SESSION['msg'] .= "<br>Fallo al almacenar la imagen";
+            }
+        } else {
+            $_SESSION['color'] = "danger";
+            $_SESSION['msg'] .= "<br>Formato de imagen inválido";
+        }
+    }
+} else {
+    $_SESSION['color'] = "danger";
+    $_SESSION['msg'] = "No se pudo guardar la imagen";
+}
+
+$conn->close();
+
+header('Location: index.php');
+
+
+
+// fichero 6 index.php
+
+<?php
+
+session_start();
+
+require 'bd.php';
+
+$sqlVideojuegos = "SELECT v.id, v.nombre, v.descripcion, g.nombre AS genero FROM videojuego AS v
+INNER JOIN genero AS g ON v.id_genero=g.id";
+$videojuegos = $conn->query($sqlVideojuegos);
+
+$dir = "imagenes/";
+
+?>
+
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Videojuegos playstation 2</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link href="recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="recursos/css/all.min.css" rel="stylesheet">
+</head>
+<body class="d-flex flex-column h-100">
+    <div class="container py-3">
+        <h2 class="text-center">Videojuegos playstation 2</h2>
+        <hr>
+
+        <?php if (isset($_SESSION['msg']) && isset($_SESSION['color'])) { ?>
+            <div class="alert alert-<?= $_SESSION['color']; ?> alert-dismissible fade show" role="alert">
+                <?= $_SESSION['msg']; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <?php
+            unset($_SESSION['color']);
+            unset($_SESSION['msg']);
+        } ?>
+
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nu_ventana_1"><i class="fa-solid fa-circle-plus"></i> Alta de datos</a>
+            </div>
+        </div>
+
+        <table class="table table-sm table-striped table-hover mt-4">
+            <thead class="table-primary">
+                <tr>
+                    <th><i>id</i></th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Género</th>
+                    <th>Imagen</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php while ($row_videojuego = $videojuegos->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?= $row_videojuego['id']; ?></td>
+                        <td><?= $row_videojuego['nombre']; ?></td>
+                        <td><?= $row_videojuego['descripcion']; ?></td>
+                        <td><?= $row_videojuego['genero']; ?></td>
+                        <td><img src="<?= $dir . $row_videojuego['id'] . '.jpg?n=' . time(); ?>" width="100"></td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#ed_ventana_1" data-bs-id="<?= $row_videojuego['id']; ?>"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                            <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#el_ventana_1" data-bs-id="<?= $row_videojuego['id']; ?>"><i class="fa-solid fa-trash"></i></i> Eliminar</a>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <p class="text-center">Tienda de videojuegos - 2025</a></p>
+        </div>
+    </footer>
+
+    <?php
+    $sqlGenero = "SELECT id, nombre FROM genero";
+    $generos = $conn->query($sqlGenero);
+
+    $conn->close();
+    ?>
+
+    <?php include 'nuevaVentana.php'; ?>
+
+    <?php $generos->data_seek(0); ?>
+
+    <?php include 'editarVentana.php'; ?>
+    <?php include 'eliminarVentana.php'; ?>
+
+    <script>
+        let nuevaVentana = document.getElementById('nu_ventana_1')
+        let editarVentana = document.getElementById('ed_ventana_1')
+        let eliminarVentana = document.getElementById('el_ventana_1')
+
+        nuevaVentana.addEventListener('shown.bs.modal', event => {
+            nuevaVentana.querySelector('.modal-body #nombre').focus()
+        })
+
+        nuevaVentana.addEventListener('hide.bs.modal', event => {
+            nuevaVentana.querySelector('.modal-body #nombre').value = ""
+            nuevaVentana.querySelector('.modal-body #descripcion').value = ""
+            nuevaVentana.querySelector('.modal-body #genero').value = ""
+            nuevaVentana.querySelector('.modal-body #imagen').value = ""
+        })
+
+        editarVentana.addEventListener('hide.bs.modal', event => {
+            editarVentana.querySelector('.modal-body #nombre').value = ""
+            editarVentana.querySelector('.modal-body #descripcion').value = ""
+            editarVentana.querySelector('.modal-body #genero').value = ""
+            editarVentana.querySelector('.modal-body #img_imagen').value = ""
+            editarVentana.querySelector('.modal-body #imagen').value = ""
+        })
+
+        editarVentana.addEventListener('shown.bs.modal', event => {
+            let button = event.relatedTarget
+            let id = button.getAttribute('data-bs-id')
+
+            let inputId = editarVentana.querySelector('.modal-body #id')
+            let inputNombre = editarVentana.querySelector('.modal-body #nombre')
+            let inputDescripcion = editarVentana.querySelector('.modal-body #descripcion')
+            let inputGenero = editarVentana.querySelector('.modal-body #genero')
+            let imagen = editarVentana.querySelector('.modal-body #img_imagen')
+
+            let url = "obtenerVideojuego.php"
+            let formData = new FormData()
+            formData.append('id', id)
+
+            fetch(url, {
+                method: "POST",
+                body: formData
+            }).then(response => response.json())
+                .then(data => {
+
+                    inputId.value = data.id
+                    inputNombre.value = data.nombre
+                    inputDescripcion.value = data.descripcion
+                    inputGenero.value = data.id_genero
+                    imagen.src = '<?= $dir ?>' + data.id + '.jpg'
+
+                }).catch(err => console.log(err))
+        })
+
+        eliminarVentana.addEventListener('shown.bs.modal', event => {
+            let button = event.relatedTarget
+            let id = button.getAttribute('data-bs-id')
+            eliminarVentana.querySelector('.modal-footer #id').value = id
+        })
+
+    </script>
+
+
+    <script src="recursos/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+// fichero 7 nuevaVentana.php
+
+<div class="modal fade" id="nu_ventana_1" tabindex="-1" aria-labelledby="nu_ventana_2" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="nu_ventana_2">Agregar datos</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="guardarDatos.php" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" name="nombre" id="nombre" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción:</label>
+                        <textarea name="descripcion" id="descripcion" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="genero" class="form-label">Género:</label>
+                        <select name="genero" id="genero" class="form-select" required>
+                            <option>Seleccionar...</option>
+                            <?php while ($row_genero = $generos->fetch_assoc()) { ?>
+                                <option value="<?php echo $row_genero["id"]; ?>"><?= $row_genero["nombre"] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="imagen" class="form-label">Imagen:</label>
+                        <input type="file" name="imagen" id="imagen" class="form-control" accept="image/jpeg">
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-warning"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+// fichero 8 obtenerVideojuego.php
+
+<?php
+
+require 'bd.php';
+
+$id = $conn->real_escape_string($_POST['id']);
+
+$sql = "SELECT id, nombre, descripcion, id_genero FROM videojuego WHERE id=$id LIMIT 1";
+$resultado = $conn->query($sql);
+$rows = $resultado->num_rows;
+
+$videojuego = [];
+
+if ($rows > 0) {
+    $videojuego = $resultado->fetch_array();
+}
+
+echo json_encode($videojuego, JSON_UNESCAPED_UNICODE);

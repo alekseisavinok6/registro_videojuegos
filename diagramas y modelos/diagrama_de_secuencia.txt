@@ -1,0 +1,76 @@
+Basándome en los archivos que proporcionaste, te daré un diagrama de secuencia para el caso de uso "Agregar videojuego", que es el más complejo en términos de interacciones con los tres actores (Usuario, Sistema de Bases de Datos y Sistema de Archivos).
+
+**Diagrama de Secuencia para "Agregar Videojuego"**
+
+**Participantes (Objetos):**
+
+*   **Usuario:** El usuario que interactúa con la interfaz.
+*   **Interfaz (index.php, nuevaVentana.php):** La página web que presenta el formulario y procesa la solicitud.
+*   **Controlador (guardarDatos.php):** El script PHP que maneja la lógica de guardar los datos.
+*   **Base de Datos (bd.php):** El sistema de gestión de la base de datos.
+*   **Sistema de Archivos:** El sistema que almacena las imágenes.
+
+**Mensajes (Secuencia de Eventos):**
+
+1.  **Usuario -> Interfaz:** Solicita agregar un nuevo videojuego (clic en "Alta de datos").
+2.  **Interfaz -> Usuario:** Muestra el formulario para agregar videojuego (nuevaVentana.php).
+3.  **Usuario -> Interfaz:** Introduce los datos del videojuego (nombre, descripción, género) y selecciona una imagen.
+4.  **Interfaz -> Controlador:** Envía los datos del formulario a guardarDatos.php.
+5.  **Controlador -> Base de Datos:** Inserta los datos del videojuego en la tabla `videojuego`.
+6.  **Base de Datos -> Controlador:** Confirma la inserción y devuelve el ID del nuevo videojuego.
+7.  **Controlador -> Sistema de Archivos:** Guarda la imagen en el directorio "imagenes" con el ID del videojuego como nombre de archivo.
+8.  **Sistema de Archivos -> Controlador:** Confirma el almacenamiento de la imagen.
+9.  **Controlador -> Interfaz:** Envía un mensaje de confirmación (o error).
+10. **Interfaz -> Usuario:** Muestra el mensaje de confirmación (o error) y redirige a index.php.
+11. **Interfaz -> Base de Datos:** Cierra la conexión.
+
+**Representación Textual (Adaptada para Simular un Diagrama Visual):**
+
+```
+Actor: Usuario
+Objeto: Interfaz (index.php, nuevaVentana.php)
+Objeto: Controlador (guardarDatos.php)
+Objeto: Base de Datos (bd.php)
+Objeto: Sistema de Archivos
+
+[Usuario]                                       [Interfaz]                                       [Controlador]                                           [Base de Datos]                                   [Sistema de Archivos]
+     |                                                  |                                                   |                                                           |                                                    |
+     | Solicita agregar videojuego                   |                                                   |                                                           |                                                    |
+     +----------------------------------------------->|                                                   |                                                           |                                                    |
+     |                                                  | Muestra formulario (nuevaVentana.php)        |                                                           |                                                    |
+     |<-----------------------------------------------|                                                   |                                                           |                                                    |
+     | Introduce datos y selecciona imagen           |                                                   |                                                           |                                                    |
+     +----------------------------------------------->|                                                   |                                                           |                                                    |
+     |                                                  | Envía datos a guardarDatos.php                    |                                                           |                                                    |
+     +---------------------------------------------------------------------------------------------------->|                                                           |                                                    |
+     |                                                  |                                                   | Inserta datos en la tabla videojuego                |                                                    |
+     |                                                  |                                                   +--------------------------------------------------------->|                                                    |
+     |                                                  |                                                   | Confirma inserción y devuelve ID                        |                                                    |
+     |<----------------------------------------------------------------------------------------------------|                                                           |                                                    |
+     |                                                  |                                                   | Guarda la imagen en "imagenes/ID.jpg"               |                                                    |
+     |                                                  |                                                   +--------------------------------------------------------------------------------------------------------------------->|
+     |                                                  |                                                   | Confirma almacenamiento                                  |
+     |<----------------------------------------------------------------------------------------------------|                                                           |
+     |                                                  | Envía mensaje de confirmación/error                |                                                           |
+     |<-----------------------------------------------|                                                   |                                                           |
+     | Muestra mensaje y redirige a index.php          |                                                   |                                                           |
+     |<-----------------------------------------------|                                                   | Cierra la conexión                                      |
+                                                       |                                                   +--------------------------------------------------------->|
+```
+
+**Explicación Adicional:**
+
+*   Las líneas verticales representan el tiempo. Los mensajes se leen de arriba a abajo.
+*   Las flechas representan los mensajes entre los objetos.
+*   Este diagrama se centra en el flujo principal. No se muestran detalles como la validación de datos en el controlador, el manejo de errores de la base de datos o el manejo de errores de la subida de la imagen, para simplificar la visualización. En un diagrama más completo, estos detalles se incluirían.
+
+**Herramientas para crear diagramas de secuencia visuales:**
+
+Al igual que para los diagramas de casos de uso, puedes usar herramientas como:
+
+*   **Draw.io (diagrams.net):** Gratuita y online.
+*   **Lucidchart:** Ofrece una versión gratuita y opciones de pago.
+*   **Microsoft Visio:** Parte de la suite de Microsoft Office (de pago).
+*   **PlantUML:** Herramienta basada en texto para generar diagramas UML.
+
+Este diagrama de secuencia te da una visión clara de las interacciones entre los objetos en el caso de uso "Agregar videojuego". Recuerda que este es un ejemplo y puedes adaptarlo para otros casos de uso o para añadir más detalle si es necesario.

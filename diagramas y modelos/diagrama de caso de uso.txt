@@ -1,0 +1,128 @@
+Entendido. Vamos a crear un diagrama de casos de uso que incluya los tres actores: Usuario, Sistema de Bases de Datos y Sistema de Archivos.
+
+**Actores:**
+
+*   **Usuario:** El usuario interactúa con la aplicación a través de la interfaz web.
+*   **Sistema de Bases de Datos:** Almacena y gestiona los datos de los videojuegos.
+*   **Sistema de Archivos:** Almacena las imágenes de los videojuegos.
+
+**Casos de Uso (con interacción de los tres actores):**
+
+*   **Agregar videojuego:**
+    *   **Usuario:** Introduce los datos del videojuego y selecciona una imagen.
+    *   **Aplicación:** Valida los datos y la imagen.
+    *   **Sistema de Bases de Datos:** Guarda los datos del videojuego (nombre, descripción, género, etc.).
+    *   **Sistema de Archivos:** Guarda la imagen del videojuego.
+
+*   **Editar videojuego:**
+    *   **Usuario:** Selecciona un videojuego para editar y modifica sus datos (incluyendo la imagen, opcionalmente).
+    *   **Aplicación:** Recupera los datos del videojuego del Sistema de Bases de Datos y la imagen del Sistema de Archivos.
+    *   **Usuario:** Visualiza los datos actuales del videojuego.
+    *   **Usuario:** Modifica los datos del videojuego.
+    *   **Aplicación:** Valida los datos modificados.
+    *   **Sistema de Bases de Datos:** Actualiza los datos del videojuego.
+    *   **Sistema de Archivos:** Si se modificó la imagen, actualiza la imagen en el sistema de archivos (reemplazando la anterior).
+
+*   **Eliminar videojuego:**
+    *   **Usuario:** Selecciona un videojuego para eliminar.
+    *   **Aplicación:** Confirma la eliminación con el usuario.
+    *   **Sistema de Bases de Datos:** Elimina los datos del videojuego.
+    *   **Sistema de Archivos:** Elimina la imagen del videojuego.
+
+*   **Ver lista de videojuegos:**
+    *   **Usuario:** Accede a la página principal.
+    *   **Aplicación:** Consulta al Sistema de Bases de Datos para obtener la lista de videojuegos.
+    *   **Sistema de Bases de Datos:** Retorna la lista de videojuegos.
+    *   **Aplicación:** Solicita las imágenes al Sistema de Archivos basándose en los IDs de los videojuegos.
+    *   **Sistema de Archivos:** Retorna las imágenes correspondientes.
+    *   **Aplicación:** Muestra la lista de videojuegos con sus respectivas imágenes.
+
+**Diagrama de Casos de Uso (Representación textual):**
+
+```
+Actores:
+    - Usuario
+    - Sistema de Bases de Datos
+    - Sistema de Archivos
+
+Casos de Uso:
+    - Agregar videojuego
+    - Editar videojuego
+    - Eliminar videojuego
+    - Ver lista de videojuegos
+
+Relaciones:
+    Usuario -- Agregar videojuego
+    Sistema de Bases de Datos -- Agregar videojuego
+    Sistema de Archivos -- Agregar videojuego
+
+    Usuario -- Editar videojuego
+    Sistema de Bases de Datos -- Editar videojuego
+    Sistema de Archivos -- Editar videojuego
+
+    Usuario -- Eliminar videojuego
+    Sistema de Bases de Datos -- Eliminar videojuego
+    Sistema de Archivos -- Eliminar videojuego
+
+    Usuario -- Ver lista de videojuegos
+    Sistema de Bases de Datos -- Ver lista de videojuegos
+    Sistema de Archivos -- Ver lista de videojuegos
+```
+
+**Representación visual (adaptada para texto, imagina las formas UML):**
+
+```
++-----------------+     +-----------------------+
+|     Usuario     |---->| Agregar videojuego    |<----| Sistema de Bases de Datos |
++-----------------+     +-----------------------+     +---------------------------+
+                        ^                       |
+                        |                       |
+                        +-----------------------+
+                                    ^
+                                    |
+                                    +----| Sistema de Archivos |
+                                         +---------------------+
+
++-----------------+     +-----------------------+
+|     Usuario     |---->| Editar videojuego     |<----| Sistema de Bases de Datos |
++-----------------+     +-----------------------+     +---------------------------+
+                        ^                       |
+                        |                       |
+                        +-----------------------+
+                                    ^
+                                    |
+                                    +----| Sistema de Archivos |
+                                         +---------------------+
+
++-----------------+     +-----------------------+
+|     Usuario     |---->| Eliminar videojuego   |<----| Sistema de Bases de Datos |
++-----------------+     +-----------------------+     +---------------------------+
+                        ^                       |
+                        |                       |
+                        +-----------------------+
+                                    ^
+                                    |
+                                    +----| Sistema de Archivos |
+                                         +---------------------+
+
++-----------------+     +-----------------------+
+|     Usuario     |---->| Ver lista de videojuegos|<----| Sistema de Bases de Datos |
++-----------------+     +-----------------------+     +---------------------------+
+                        ^                       |
+                        |                       |
+                        +-----------------------+
+                                    ^
+                                    |
+                                    +----| Sistema de Archivos |
+                                         +---------------------+
+```
+
+En un diagrama UML visual, usarías líneas de asociación entre los actores y los casos de uso. Este formato textual intenta representar esas conexiones.
+
+**Puntos clave:**
+
+*   Este diagrama muestra explícitamente la interacción de los tres actores en cada caso de uso.
+*   Es más detallado que el diagrama anterior, ya que incluye los actores técnicos.
+*   Sería aún más útil complementarlo con diagramas de secuencia para mostrar el flujo de mensajes entre los objetos (instancias de los actores) en cada caso de uso.
+
+Este diagrama te proporciona una visión más completa de las interacciones en tu aplicación. Recuerda que puedes adaptarlo y refinarlo según las necesidades de tu proyecto. Usar una herramienta de diagramación UML te ayudará a crear una representación visual clara y profesional.

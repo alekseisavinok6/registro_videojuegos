@@ -76,7 +76,7 @@ $dir = "imagenes/";
 
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container">
-            <p class="text-center">Tienda de videojuegos - 2025</a></p>
+            <p class="text-center">Registro de videojuegos - 2025</a></p>
         </div>
     </footer>
 
