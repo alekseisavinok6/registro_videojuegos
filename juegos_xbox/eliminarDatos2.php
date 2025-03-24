@@ -2,11 +2,11 @@
 
 session_start();
 
-require 'bd.php';
+require '../bd.php';
 
 $id = $conn->real_escape_string($_POST['id']);
 
-$sql = "DELETE FROM videojuego WHERE id=$id";
+$sql = "DELETE FROM videojuegos_xbox WHERE id=$id";
 
 if ($conn->query($sql)) {
 
@@ -26,4 +26,4 @@ if ($conn->query($sql)) {
 
 $conn->close();
 
-header('Location: index.php');
+header('Location: index2.php');

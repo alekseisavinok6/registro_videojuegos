@@ -2,13 +2,13 @@
 
 session_start();
 
-require 'bd.php';
+require '../bd.php';
 
 $nombre = $conn->real_escape_string($_POST['nombre']);
 $descripcion = $conn->real_escape_string($_POST['descripcion']);
 $genero = $conn->real_escape_string($_POST['genero']);
 
-$sql = "INSERT INTO videojuego2 (nombre, descripcion, id_genero, fecha_alta)
+$sql = "INSERT INTO videojuegos_xbox (nombre, descripcion, id_genero, fecha_alta)
 VALUES ('$nombre', '$descripcion', $genero, NOW())";
 
 if ($conn->query($sql)) {

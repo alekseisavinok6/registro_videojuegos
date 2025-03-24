@@ -2,9 +2,9 @@
 
 session_start();
 
-require 'bd.php';
+require '../bd.php';
 
-$sqlVideojuegos = "SELECT v.id, v.nombre, v.descripcion, g.nombre AS genero FROM videojuego AS v
+$sqlVideojuegos = "SELECT v.id, v.nombre, v.descripcion, g.nombre AS genero FROM videojuegos_ps2 AS v
 INNER JOIN genero AS g ON v.id_genero=g.id";
 $videojuegos = $conn->query($sqlVideojuegos);
 
@@ -17,10 +17,10 @@ $dir = "imagenes/";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registro videojuegos - ps2</title>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link href="recursos/css/bootstrap.min.css" rel="stylesheet">
-    <link href="recursos/css/all.min.css" rel="stylesheet">
+    <title>Registro videojuegos PS2</title>
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/all.min.css" rel="stylesheet">
 </head>
 <body class="d-flex flex-column h-100">
     <div class="container py-3">
@@ -40,7 +40,7 @@ $dir = "imagenes/";
 
         <div class="row justify-content-end">
             <div class="col-auto">
-                <a href="index2.php" class="btn btn-secondary"><i class="fa-solid fa-arrow-right"></i> Ir a Xbox</a>
+                <a href="../juegos_xbox/index2.php" class="btn btn-secondary"><i class="fa-solid fa-arrow-right"></i> Ir a Xbox</a>
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nu_ventana_1"><i class="fa-solid fa-circle-plus"></i> Alta de datos</a>
             </div>
         </div>
@@ -58,16 +58,16 @@ $dir = "imagenes/";
             </thead>
 
             <tbody>
-                <?php while ($row_videojuego = $videojuegos->fetch_assoc()) { ?>
+                <?php while ($row_videojuegos_ps2 = $videojuegos->fetch_assoc()) { ?>
                     <tr>
-                        <td><?= $row_videojuego['id']; ?></td>
-                        <td><?= $row_videojuego['nombre']; ?></td>
-                        <td><?= $row_videojuego['descripcion']; ?></td>
-                        <td><?= $row_videojuego['genero']; ?></td>
-                        <td><img src="<?= $dir . $row_videojuego['id'] . '.jpg?n=' . time(); ?>" width="100"></td>
+                        <td><?= $row_videojuegos_ps2['id']; ?></td>
+                        <td><?= $row_videojuegos_ps2['nombre']; ?></td>
+                        <td><?= $row_videojuegos_ps2['descripcion']; ?></td>
+                        <td><?= $row_videojuegos_ps2['genero']; ?></td>
+                        <td><img src="<?= $dir . $row_videojuegos_ps2['id'] . '.jpg?n=' . time(); ?>" width="100"></td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#ed_ventana_1" data-bs-id="<?= $row_videojuego['id']; ?>"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
-                            <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#el_ventana_1" data-bs-id="<?= $row_videojuego['id']; ?>"><i class="fa-solid fa-trash"></i></i> Eliminar</a>
+                            <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#ed_ventana_1" data-bs-id="<?= $row_videojuegos_ps2['id']; ?>"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                            <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#el_ventana_1" data-bs-id="<?= $row_videojuegos_ps2['id']; ?>"><i class="fa-solid fa-trash"></i></i> Eliminar</a>
                         </td>
                     </tr>
                 <?php } ?>
@@ -157,6 +157,6 @@ $dir = "imagenes/";
     </script>
 
 
-    <script src="recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

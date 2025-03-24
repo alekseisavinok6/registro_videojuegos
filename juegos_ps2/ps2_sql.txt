@@ -5,7 +5,7 @@ CREATE TABLE genero (
     nombre VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE videojuego (
+CREATE TABLE videojuegos_ps2 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT,
@@ -27,7 +27,7 @@ INSERT INTO genero (nombre) VALUES
 ('Plataformas'),
 ('Música');
 
-INSERT INTO videojuego (nombre, descripcion, id_genero, fecha_alta) VALUES
+INSERT INTO videojuegos_ps2 (nombre, descripcion, id_genero, fecha_alta) VALUES
 ('Grand Theft Auto: San Andreas', 'Juego de mundo abierto ambientado en una ciudad ficticia con misiones de acción.', 1),
 ('Shadow of the Colossus', 'Juego de aventura donde luchas contra enormes colosos en un mundo desolado.', 2),
 ('Final Fantasy X', 'RPG por turnos con una narrativa rica y personajes memorables.', 3),

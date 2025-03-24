@@ -2,20 +2,19 @@
 
 session_start();
 
-require 'bd.php';
+require '../bd.php';
 
+$id = $conn->real_escape_string($_POST['id']);
 $nombre = $conn->real_escape_string($_POST['nombre']);
 $descripcion = $conn->real_escape_string($_POST['descripcion']);
 $genero = $conn->real_escape_string($_POST['genero']);
 
-$sql = "INSERT INTO videojuego (nombre, descripcion, id_genero, fecha_alta)
-VALUES ('$nombre', '$descripcion', $genero, NOW())";
+$sql = "UPDATE videojuegos_xbox SET nombre ='$nombre', descripcion = '$descripcion', id_genero=$genero WHERE id=$id";
 
 if ($conn->query($sql)) {
-    $id = $conn->insert_id;
 
     $_SESSION['color'] = "success";
-    $_SESSION['msg'] = "Registro guardado";
+    $_SESSION['msg'] = "Registro actualizado";
 
     if ($_FILES['imagen']['error'] == UPLOAD_ERR_OK) {
         $permitidos = array("image/jpg", "image/jpeg");
@@ -34,7 +33,7 @@ if ($conn->query($sql)) {
 
             if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $imagen)) {
                 $_SESSION['color'] = "danger";
-                $_SESSION['msg'] .= "<br>Fallo al almacenar la imagen";
+                $_SESSION['msg'] .= "<br>No se pudo guardar la imagen";
             }
         } else {
             $_SESSION['color'] = "danger";
@@ -43,9 +42,9 @@ if ($conn->query($sql)) {
     }
 } else {
     $_SESSION['color'] = "danger";
-    $_SESSION['msg'] = "No se pudo guardar la imagen";
+    $_SESSION['msg'] = "Actualización del registro fallida";
 }
 
 $conn->close();
 
-header('Location: index.php');
+header('Location: index2.php');
