@@ -17,14 +17,14 @@ $dir = "imagenes/";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Videojuegos playstation 2</title>
+    <title>Registro videojuegos - ps2</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link href="recursos/css/bootstrap.min.css" rel="stylesheet">
     <link href="recursos/css/all.min.css" rel="stylesheet">
 </head>
 <body class="d-flex flex-column h-100">
     <div class="container py-3">
-        <h2 class="text-center">Videojuegos playstation 2</h2>
+        <h2 class="text-center">Videojuegos PlayStation 2</h2>
         <hr>
 
         <?php if (isset($_SESSION['msg']) && isset($_SESSION['color'])) { ?>
@@ -40,6 +40,7 @@ $dir = "imagenes/";
 
         <div class="row justify-content-end">
             <div class="col-auto">
+                <a href="index2.php" class="btn btn-secondary"><i class="fa-solid fa-arrow-right"></i> Ir a Xbox</a>
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nu_ventana_1"><i class="fa-solid fa-circle-plus"></i> Alta de datos</a>
             </div>
         </div>
